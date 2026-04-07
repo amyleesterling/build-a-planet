@@ -1518,10 +1518,10 @@ function drawDragLine() {
 // THEIA COLLISION SYSTEM
 // ============================================================
 function updateTheia(t) {
-  if (!theiaActive || !theia) return;
+  if (!theiaActive) return;
   theiaTimer++;
 
-  if (theiaPhase === 0) {
+  if (theiaPhase === 0 && theia) {
     // Phase 0: Approaching — accelerate toward Earth
     const dx = -theia.x;
     const dy = -theia.y;
@@ -1570,8 +1570,10 @@ function updateTheia(t) {
 
   if (theiaPhase === 1) {
     // Phase 1: Impact explosion — debris flying, screen shaking
-    theia.size *= 0.95; // Theia is absorbed
-    if (theia.size < 2) theia = null;
+    if (theia) {
+      theia.size *= 0.95; // Theia is absorbed
+      if (theia.size < 2) theia = null;
+    }
 
     shakeDecay = Math.max(shakeDecay, 2 * (1 - theiaTimer / 120));
     if (bigImpactFlash > 0.3) bigImpactFlash *= 0.97;
